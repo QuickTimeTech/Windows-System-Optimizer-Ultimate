@@ -1,6 +1,3 @@
-# Windows-System-Optimizer-Ultimate
-Windows System Optimizer Ultimate is a portable, 34-in-1 IT maintenance, hardware diagnostic, and gaming suite built in Python. It features 1-click Autopilot cleanup, RAM &amp; service tuning, an in-game HUD, laptop dGPU sleep protection, and deep GPU, network, and monitor diagnostics—all packed into a single, zero-bloat executable.
-
 # ⚡ Windows System Optimizer Ultimate — IT Maintenance & Gaming Suite
 
 ![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20(64--bit)-0078D6?style=for-the-badge&logo=windows)
@@ -14,11 +11,11 @@ Windows System Optimizer Ultimate is a portable, 34-in-1 IT maintenance, hardwar
 
 ## 🌟 Key Architectural Highlights
 
-* **⚡ Lazy-Loading Zero-Overhead Engine:** Modules are dynamically imported on demand (`importlib`) and cached. Background UI redraws pause automatically when minimized to the System Tray (`0.0%` idle CPU overhead).
-* **🔋 NVIDIA Advanced Optimus Laptop Sleep Guard:** Automatically detects laptop batteries and prevents background `nvidia-smi` polling from waking dedicated RTX GPUs out of `D3cold` (0W) sleep unless the user is actively viewing the *GPU Performance Center* tab.
-* **🧠 Smart Energy Report Translator (`powercfg /energy`):** Automatically decodes cryptic Windows hardware `VID/PID` hex strings and Device Manager error codes (such as `0x16` / Code 22 on sleeping Bluetooth controllers or Logitech LIGHTSPEED 1000Hz receivers) into plain English while flagging genuine CPU timer locks like `LightingService.exe`.
-* **⌨️ Global Win32 In-Game Hotkeys & Tray Super-Menu:** Control RAM trimming (`Ctrl + Shift + B`) and toggle the translucent **Floating Gaming HUD** (`Ctrl + Shift + H`) directly inside fullscreen games without Alt-Tabbing.
-* **🤖 Headless Task Scheduler CLI (`--silent-autopilot`):** Run full system cleanups, working-set RAM trims, and DNS flushes silently in the background via command-line flags with zero GUI windows.
+- **⚡ Lazy-Loading Zero-Overhead Engine:** Modules are dynamically imported on demand (`importlib`) and cached. Background UI redraws pause automatically when minimized to the System Tray (`0.0%` idle CPU overhead).
+- **🔋 NVIDIA Advanced Optimus Laptop Sleep Guard:** Automatically detects laptop batteries and prevents background `nvidia-smi` polling from waking dedicated RTX GPUs out of `D3cold` (0W) sleep unless the user is actively viewing the *GPU Performance Center* tab.
+- **🧠 Smart Energy Report Translator (`powercfg /energy`):** Automatically decodes cryptic Windows hardware `VID/PID` hex strings and Device Manager error codes (such as `0x16` / Code 22 on sleeping Bluetooth controllers or Logitech LIGHTSPEED 1000Hz receivers) into plain English while flagging genuine CPU timer locks like `LightingService.exe`.
+- **⌨️ Global Win32 In-Game Hotkeys & Tray Super-Menu:** Control RAM trimming (`Ctrl + Shift + B`) and toggle the translucent **Floating Gaming HUD** (`Ctrl + Shift + H`) directly inside fullscreen games without Alt-Tabbing.
+- **🤖 Headless Task Scheduler CLI (`--silent-autopilot`):** Run full system cleanups, working-set RAM trims, and DNS flushes silently in the background via command-line flags with zero GUI windows.
 
 ---
 
@@ -98,12 +95,48 @@ Windows System Optimizer Ultimate is a portable, 34-in-1 IT maintenance, hardwar
 
 ---
 
-## 🚀 Installation & Running from Source
+## 🚀 Installation, Running from Source & Building the `.EXE`
 
 ### Prerequisites
-* **OS:** Windows 10 or Windows 11 (64-bit)
-* **Python:** Python 3.11+ (Run as Administrator for full service, registry, and `powercfg` access)
+- **OS:** Windows 10 or Windows 11 (64-bit)
+- **Python:** Python 3.11+ (Run as Administrator for full service, registry, and `powercfg` access)
 
-### 1. Install Dependencies
+### Step 1: Install Dependencies
+Open a Terminal or Command Prompt inside the project folder and run:
+
 ```bash
 pip install customtkinter psutil pillow pystray pyinstaller
+```
+
+### Step 2: Build the Standalone `.EXE` File (Using `build.bat`)
+To package the entire program into a single, portable **`PC_Optimizer_Ultimate.exe`** file that you can run directly without needing Python open, run the included batch script in your terminal:
+
+```bat
+.\build.bat
+```
+
+*(Or simply double-click **`build.bat`** directly inside Windows File Explorer).*
+
+**What running `build.bat` does automatically:**
+1. Verifies and installs all required Python packages (`customtkinter`, `psutil`, `pillow`, `pystray`, `pyinstaller`).
+2. Runs `icon_generator.py` to generate the custom `app_icon.ico` vector icon.
+3. Uses **PyInstaller** (`--onefile --noconsole --uac-admin`) to compile `main.py` and all 34 modules into a single standalone executable.
+4. Outputs the finished executable to **`dist\PC_Optimizer_Ultimate.exe`** and automatically opens the `dist` folder so you can double-click **`PC_Optimizer_Ultimate.exe`** to launch the program!
+
+### Step 3: Run Directly from Python Source (Alternative)
+If you prefer to launch the program directly from the Python source code without compiling an `.exe` first, run:
+
+```bash
+python main.py
+```
+
+*(Note: `main.py` automatically requests Windows UAC Administrator elevation on startup so hardware diagnostics, service controls, and registry tweaks work seamlessly.)*
+
+### Step 4: Build a Windows Setup Installer (Optional)
+If you have [Inno Setup](https://jrsoftware.org/isinfo.php) installed, run **`build.bat`** first to generate `dist\PC_Optimizer_Ultimate.exe`, then open **`installer_setup.iss`** and click **Compile** to create a standard Windows Setup Wizard (`PC_Optimizer_Ultimate_Setup.exe`).
+
+---
+
+## 🛡️ Safety & Persistence Files
+- **`ignored_devices.json`**: Stores Device Manager PnP IDs muted by the user so disabled or harmless devices never penalize the *PC Health Scorecard*.
+- **`ignored_updates.json`**: Stores Winget package IDs muted by the user so pinned software versions are skipped during *Software Update Center* and *Autopilot* scans.
